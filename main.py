@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
 
 app = FastAPI()
 
+# GETメソッド
 @app.get("/index")
 def index():
     html_content = """
@@ -23,3 +25,13 @@ def index():
     </html>
     """
     return HTMLResponse(content=html_content, status_code=200)
+
+# POSTメソッド用のデータモデル
+class PresentRequest(BaseModel):
+    present: str
+
+# POSTメソッド
+@app.post("/present")
+async def give_present(request: PresentRequest):
+    return {"response": f"サーバです。メリークリスマス！ {request.present}ありがとう。お返しはキャンディーです。"}
+
